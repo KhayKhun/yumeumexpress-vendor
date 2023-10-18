@@ -4,13 +4,7 @@ import type { foodType } from "../constants/global.types";
 export const useFoodStore = create((set) => ({
   foods: [],
   setFoods: (newFoods: foodType[]) => set({ foods: newFoods }),
-  updateFoods: (newFoods: foodType[]) => set((state: any) => {
-    const existingFoodIds = new Set(state.foods.map((food : foodType) => food.id));
-
-    const uniqueNewFoods = newFoods.filter(food => !existingFoodIds.has(food.id));
-
-    return { foods: [...state.foods, ...uniqueNewFoods] };
-  })
+  updateFoods: (newFoods: foodType[]) => set({foods: newFoods})
 }));
 
 

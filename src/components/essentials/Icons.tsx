@@ -3,9 +3,16 @@ import { useNavigate } from "react-router-dom";
 import {
   RiUser3Line,
   RiArrowLeftLine,
+  RiArrowRightSLine,
   RiHeart3Line,
   RiLogoutBoxLine,
+  RiNotification3Line,
+  RiArrowRightDoubleLine,
+  RiRefreshLine,
 } from "react-icons/ri";
+import {MdOutlineFastfood} from 'react-icons/md';
+import { FaCircleXmark } from "react-icons/fa6";
+import { IoIosCheckmarkCircle } from "react-icons/io";
 import { BsBag, BsCart2, BsStarFill,BsShopWindow, BsPlus,BsDash, BsX } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 
@@ -40,11 +47,32 @@ export const CartIcon: React.FC<IconProps> = ({ className }) => (
 export const XMarkIcon: React.FC<IconProps> = ({ className }) => (
   <BsX className={className} />
 );
+export const XMarkFillIcon: React.FC<IconProps> = ({ className }) => (
+  <FaCircleXmark className={className} />
+);
 export const ResturantIcon: React.FC<IconProps> = ({ className }) => (
   <BsShopWindow className={className} />
 );
 export const LogoutIcon: React.FC<IconProps> = ({ className }) => (
   <RiLogoutBoxLine className={className} />
+);
+export const RightArrowOpenIcon: React.FC<IconProps> = ({ className }) => (
+  <RiArrowRightSLine className={className} />
+);
+export const NotiIcon: React.FC<IconProps> = ({ className }) => (
+  <RiNotification3Line className={className} />
+);
+export const FoodIcon: React.FC<IconProps> = ({ className }) => (
+  <MdOutlineFastfood className={className} />
+);
+export const DoubleArrowIcon: React.FC<IconProps> = ({ className }) => (
+  <RiArrowRightDoubleLine className={className} />
+);
+export const CheckmarkFillIcon: React.FC<IconProps> = ({ className }) => (
+  <IoIosCheckmarkCircle className={className} />
+);
+export const RefreshIcon: React.FC<IconProps> = ({ className }) => (
+  <RiRefreshLine className={className} />
 );
 
 export const BackButton = () => {

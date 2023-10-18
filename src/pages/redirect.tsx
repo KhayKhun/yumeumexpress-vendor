@@ -1,11 +1,11 @@
-import AuthComponent from "./components/auth/AuthComponent";
-import Header from "./components/essentials/Header";
-import supabase from "../utils/supabase";
+import supabase from "../../utils/supabase"
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom"
+import LoadingFoods from "../components/essentials/LoadingFoods";
 
-function App() {
+const Redirect = () => {
   const navigate = useNavigate();
+
   useEffect(() => {
     const getSession = supabase.auth.getSession();
 
@@ -17,16 +17,11 @@ function App() {
       if (response.data.session?.user) {
         navigate("/dashboard/resturants");
       } else {
+        navigate("/");
       }
     });
   }, []);
-
-  return (
-    <main>
-      <Header />
-      <AuthComponent />
-    </main>
-  );
+  return <LoadingFoods/>
 }
 
-export default App;
+export default Redirect

@@ -39,7 +39,6 @@ const ProfilePage = () => {
     phoneMessage: "Invalid phone number ( Must be 10 digits )",
   });
 
-  console.log(profile);
   const fetchProfile = async (id: string, email: string | undefined) => {
     let { data: profiles, error } = await supabase
       .from("profiles")
