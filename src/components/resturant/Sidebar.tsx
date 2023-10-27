@@ -5,21 +5,42 @@ import { useLocation } from "react-router-dom"
 const Sidebar = () => {
   const location = useLocation();
   const path = location.pathname
-  console.log(path)
   return (
-    <main className="bg-white flex flex-col gap-1 pt-4 text-primary-green items-center text-2xl border-r shadow-lg w-[60px] left-0 h-screen fixed">
-      <Link className={` p-2 rounded-md ${path.includes('/orders') ? 'bg-green-700 text-white' : 'hover:bg-gray-50 bg-white'}`} to="orders">
-        <NotiIcon/>
+    <main className="bg-white flex flex-col gap-1 p-2 text-green-800 items-start text-base border-r shadow-lg w-[200px] left-0 h-screen fixed z-50">
+      <Link
+        className={` p-2 rounded-md flex items-center w-full gap-2 ${
+          path.includes("/orders")
+            ? "bg-primary-green text-white"
+            : "hover:bg-gray-50 bg-white"
+        }`}
+        to="orders"
+      >
+        <NotiIcon /> <span className="">Orders</span>
       </Link>
-      <Link className={` p-2 rounded-md ${path.includes('/foods') ? 'bg-green-700 text-white' : 'hover:bg-gray-50 bg-white'}`} to="foods">
-        <FoodIcon/>
+      <Link
+        className={` p-2 rounded-md flex items-center w-full gap-2 ${
+          path.includes("/foods")
+            ? "bg-primary-green text-white"
+            : "hover:bg-gray-50 bg-white"
+        }`}
+        to="foods"
+      >
+        <FoodIcon />
+        <span className="">Foods</span>
       </Link>
-      <Link className={` p-2 rounded-md ${path.includes('/info') ? 'bg-green-700 text-white' : 'hover:bg-gray-50 bg-white'}`} to="info" >
-        <ResturantIcon/>
+      <Link
+        className={` p-2 rounded-md flex items-center w-full gap-2 ${
+          path.includes("/info")
+            ? "bg-primary-green text-white"
+            : "hover:bg-gray-50 bg-white"
+        }`}
+        to="info"
+      >
+        <ResturantIcon />
+        <span className="">Vendor info</span>
       </Link>
-
     </main>
-  )
+  );
 }
 
 export default Sidebar

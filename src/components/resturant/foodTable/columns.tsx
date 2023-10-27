@@ -1,67 +1,28 @@
 import {
-  CheckmarkFillIcon,
   RefreshIcon,
-  XMarkFillIcon,
 } from "@/components/essentials/Icons";
 import { foodType } from "@/constants/global.types";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import supabase from "../../../../utils/supabase";
+import { useParams, useSearchParams } from "react-router-dom";
+import supabase from "../../../lib/supabase";
 import { useFoodStore } from "@/states/foodState";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Ring } from "@uiball/loaders";
+import ImageCard from "./cards/ImageCard";
+import AvailableCard from "./cards/AvailableCard";
 
 function ColumnComponent() {
   const { resturantId } = useParams();
-
+  const [searchParams] = useSearchParams();
+  const edit = searchParams.get("edit");
   const setFoods = useFoodStore((state: any) => state.setFoods);
   const foods = useFoodStore((state: any) => state.foods);
-
+  useEffect(() => {
+    if (foods?.length > 0) {
+      localStorage.setItem("copy_foods", JSON.stringify(foods));
+    }
+  }, [foods]);
   const [buttonDisabled, setButtonDisabled] = useState(false);
-
-  const toggleIsAvailable = async (foodId: string) => {
-    let { data, error }: any = await supabase
-      .from("products")
-      .select("is_available")
-      .eq("id", foodId);
-
-    if (error) {
-      console.log(error);
-      return;
-    }
-
-    if (data?.length > 0) {
-      const currentIsAvailable = data[0].is_available;
-
-      const update = await supabase
-        .from("products")
-        .update({ is_available: !currentIsAvailable })
-        .eq("id", foodId);
-
-      if (update.error) {
-        console.log(update.error);
-        return;
-      }
-      const updatedData = foods.map((food: foodType) => {
-        if (food.id.toString() === foodId.toString()) {
-          return {
-            ...food,
-            is_available: !currentIsAvailable,
-          };
-        }
-        return food;
-      });
-      setFoods(updatedData);
-    }
-  };
 
   const fetchFoods = async () => {
     if (buttonDisabled) return;
@@ -71,7 +32,7 @@ function ColumnComponent() {
       .from("products")
       .select("id,image,name,discount,is_available,price,description")
       .eq("seller_id", resturantId)
-      .order("id");
+      .order("id", { ascending: false });
 
     if (error) {
       console.log(error);
@@ -86,7 +47,7 @@ function ColumnComponent() {
 
   const columns: ColumnDef<foodType>[] = [
     {
-      accessorKey: " ",
+      accessorKey: "id",
       header: () => (
         <button
           className="text-white flex gap-1 items-center"
@@ -101,51 +62,44 @@ function ColumnComponent() {
           refresh
         </button>
       ),
-      cell: ({ row }) => {
-        const id: string = row.getValue("id");
-        const available: string = row.getValue("is_available");
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => {
-                  console.log("clicked");
-                  toggleIsAvailable(id);
-                }}
-              >
-                {available ? "Unavailble" : "Available"}
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Link to={`edit/${id}`} className="w-full h-full">Edit details</Link>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
-    {
-      accessorKey: "id",
-      header: () => <h1 className="tb-header">ID</h1>,
     },
     {
       accessorKey: "image",
       header: () => <h1 className="tb-header">Image</h1>,
       cell: ({ row }) => {
         const image_url: string = row.getValue("image");
-        if (image_url)
-          return (
-            <img src={image_url} className="w-[50px] h-[50px] object-cover" />
-          );
+        const id: string = row.getValue("id");
+        return <ImageCard props={{image_url,foodId : id}}/>
       },
     },
     {
       accessorKey: "name",
       header: () => <h1 className="tb-header">Title</h1>,
+      cell: ({ row }) => {
+        const name: string = row.getValue("name");
+        const id: string = row.getValue("id");
+        return (
+          <input
+            className="table-input"
+            disabled={!(edit === "true")}
+            onChange={(e) => {
+              const ls: any = localStorage.getItem("copy_foods");
+              const copy_foods = JSON.parse(ls);
+
+              const updatedFoods = copy_foods.map((food: foodType) => {
+                if (food.id.toString() == id.toString()) {
+                  return { ...food, name: e.target.value };
+                } else {
+                  return { ...food };
+                }
+              });
+              console.log(updatedFoods[0]);
+              localStorage.setItem("copy_foods", JSON.stringify(updatedFoods));
+            }}
+            defaultValue={name}
+          />
+        );
+      },
     },
     {
       accessorKey: "discount",
@@ -165,30 +119,67 @@ function ColumnComponent() {
       header: () => <h1 className="tb-header">Available</h1>,
       cell: ({ row }) => {
         const available: string = row.getValue("is_available");
-        if (available)
-          return (
-            <div className="w-full flex justify-center">
-              <CheckmarkFillIcon className="text-primary-green text-2xl" />
-            </div>
-          );
-        else
-          return (
-            <div className="w-full flex justify-center">
-              <XMarkFillIcon className="text-red-600 text-xl" />
-            </div>
-          );
+        const id:string = row.getValue('id')
+        return <AvailableCard foodId={id} defaultAvailable={Boolean(available)}/>
       },
     },
     {
       accessorKey: "price",
       header: () => <h1 className="tb-header">Price</h1>,
+      cell: ({ row }) => {
+        const price: string = row.getValue("price");
+        const id: string = row.getValue("id");
+        return (
+          <input
+            className="table-input"
+            disabled={!(edit === "true")}
+            onChange={(e) => {
+              const ls: any = localStorage.getItem("copy_foods");
+              const copy_foods = JSON.parse(ls);
+
+              const updatedFoods = copy_foods.map((food: foodType) => {
+                if (food.id.toString() == id.toString()) {
+                  return { ...food, price: e.target.value };
+                } else {
+                  return { ...food };
+                }
+              });
+              localStorage.setItem("copy_foods", JSON.stringify(updatedFoods));
+            }}
+            defaultValue={price}
+          />
+        );
+      },
     },
     {
       accessorKey: "description",
       header: () => <h1 className="tb-header">Description</h1>,
+      cell: ({ row }) => {
+        const description: string = row.getValue("description");
+        const id: string = row.getValue("id");
+        return (
+          <input
+            className="table-input"
+            disabled={!(edit === "true")}
+            onChange={(e) => {
+              const ls: any = localStorage.getItem("copy_foods");
+              const copy_foods = JSON.parse(ls);
+
+              const updatedFoods = copy_foods.map((food: foodType) => {
+                if (food.id.toString() == id.toString()) {
+                  return { ...food, description: e.target.value };
+                } else {
+                  return { ...food };
+                }
+              });
+              localStorage.setItem("copy_foods", JSON.stringify(updatedFoods));
+            }}
+            defaultValue={description}
+          />
+        );
+      },
     },
   ];
-
   return { columns };
 }
 export default ColumnComponent;

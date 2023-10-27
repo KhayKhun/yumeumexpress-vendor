@@ -1,5 +1,5 @@
 import { useEffect} from 'react';
-import supabase from '../../../utils/supabase';
+import supabase from '../../lib/supabase';
 import { useAuthStore } from '../../states/authState';
 
 const NavigateResturants = () => {

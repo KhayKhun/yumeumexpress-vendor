@@ -1,4 +1,4 @@
-import supabase from "../../utils/supabase"
+import supabase from "../lib/supabase"
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import LoadingFoods from "../components/essentials/LoadingFoods";

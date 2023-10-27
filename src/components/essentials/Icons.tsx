@@ -9,6 +9,7 @@ import {
   RiNotification3Line,
   RiArrowRightDoubleLine,
   RiRefreshLine,
+  RiNotificationOffLine,
 } from "react-icons/ri";
 import {MdOutlineFastfood} from 'react-icons/md';
 import { FaCircleXmark } from "react-icons/fa6";
@@ -61,6 +62,9 @@ export const RightArrowOpenIcon: React.FC<IconProps> = ({ className }) => (
 );
 export const NotiIcon: React.FC<IconProps> = ({ className }) => (
   <RiNotification3Line className={className} />
+);
+export const NotiOffIcon: React.FC<IconProps> = ({ className }) => (
+  <RiNotificationOffLine className={className} />
 );
 export const FoodIcon: React.FC<IconProps> = ({ className }) => (
   <MdOutlineFastfood className={className} />

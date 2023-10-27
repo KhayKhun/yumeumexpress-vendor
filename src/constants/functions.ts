@@ -23,3 +23,20 @@ export function merge(newArr: any[], oldArr: any[]) {
 
   return mergedArray;
 }
+export function formatRelativeDate(date: Date): string {
+  const now = new Date();
+  const propDate = new Date (date)
+  const diff = now.getTime() - propDate.getTime();
+  const ONE_MINUTE = 1000 * 60;
+
+  const full_date = new Intl.DateTimeFormat(undefined, { dateStyle: 'long', timeStyle: 'short'}).format(propDate)
+  const hm = `${propDate.getHours()}:${propDate.getMinutes()} ${propDate.getHours() >= 12 ? 'pm' : 'am'}`
+
+  if (diff < ONE_MINUTE * 60 * 24) {
+    return 'Today ' + hm
+  } else if (diff < ONE_MINUTE * 60 * 24 * 2) {
+    return 'Yesterday ' + hm;
+  } else {
+    return full_date
+  }
+}

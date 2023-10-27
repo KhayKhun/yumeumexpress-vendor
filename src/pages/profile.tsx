@@ -1,5 +1,5 @@
 import Header from "../components/essentials/Header";
-import supabase from "../../utils/supabase";
+import supabase from "../lib/supabase";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -111,7 +111,7 @@ const ProfilePage = () => {
             console.log(error);
             return;
           }
-          navigate('/foods');
+          navigate('/');
         }
         updateProfile();
         

@@ -4,7 +4,6 @@ import type { foodType } from "../constants/global.types";
 export const useFoodStore = create((set) => ({
   foods: [],
   setFoods: (newFoods: foodType[]) => set({ foods: newFoods }),
-  updateFoods: (newFoods: foodType[]) => set({foods: newFoods})
 }));
 
 

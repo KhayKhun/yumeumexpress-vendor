@@ -79,10 +79,28 @@
   tr:nth-child(odd){
     @apply bg-gray-50
   }
+  tr.selected{
+    @apply bg-opacity-30 bg-primary-green
+  }
   .tb-header{
-    @apply text-gray-200
+    @apply text-white
   }
   th{
-    @apply bg-primary-green
+    @apply bg-green-700
+  }
+  .table-input{
+    @apply p-4 bg-white border disabled:bg-transparent disabled:p-0 disabled:border-0 
+  }
+  input{
+    @apply overflow-auto
+  }
+  .form-input{
+    @apply w-full p-2 border border-primary-green bg-gray-50
+  }
+  .info-input{
+    @apply w-full p-2 border border-primary-green bg-gray-50 disabled:border-gray-200 disabled:rounded-lg disabled:text-gray-400
+  }
+  li{
+    @apply list-none
   }
 }

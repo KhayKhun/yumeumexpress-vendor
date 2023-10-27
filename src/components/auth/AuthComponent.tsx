@@ -1,4 +1,4 @@
-import supabase from "../../../utils/supabase";
+import supabase from "../../lib/supabase";
 import { useEffect } from "react";
 import { useAuthStore } from "../../states/authState";
 import { Link } from "react-router-dom";

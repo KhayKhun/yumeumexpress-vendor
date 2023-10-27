@@ -7,9 +7,10 @@ import ProfilePage from "./pages/profile.tsx";
 import DashboardPage from "./pages/dashboard.tsx";
 import ResturantPage from "./pages/resturant.tsx";
 import Redirect from "./pages/redirect.tsx";
-import Orders from "./components/resturant/Orders.tsx";
+import Orders from "./components/resturant/orders/Orders.tsx";
 import FoodsManage from "./components/resturant/FoodsManage.tsx";
 import Info from "./components/resturant/Info.tsx";
+import { Toaster } from "@/components/ui/toaster";
 
 const MarginGap = () => <div className="mb-[60px]" />;
 const router = createBrowserRouter([
@@ -53,5 +54,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <MarginGap />
     <RouterProvider router={router} />
+    <Toaster/>
   </React.StrictMode>
 );
