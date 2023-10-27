@@ -6,7 +6,6 @@ import supabase from "./supabase";
 
 export default function TestSocket() {
   const{toast} = useToast();
-  const updateOrders = userOrderStore((state:any) => state?.updateOrders)
   function JoinSocket(resturant_id:string) {
     socket.emit("join", resturant_id);
   }

@@ -6,7 +6,7 @@ import {useParams, useSearchParams } from "react-router-dom";
 import ErrorPage from "@/components/essentials/ErrorPage";
 import LoadingFoods from "@/components/essentials/LoadingFoods";
 import ColumnComponent from "./columns";
-import { CheckmarkFillIcon, EditIcon, PlusIcon } from "@/components/essentials/Icons";
+import { CheckmarkFillIcon, EditIcon } from "@/components/essentials/Icons";
 import AddMoreFoods from "./cards/AddMoreFoods";
 export default function FoodTable() {
   const { columns } = ColumnComponent();
