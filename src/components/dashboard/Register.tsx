@@ -77,7 +77,7 @@ const Register = ({ fetchResturants }: { fetchResturants  : () => Promise<void>}
   };
   return (
     <Sheet>
-      <SheetTrigger className="w-full bg-primary-green p-2 rounded-md text-white hover:bg-green-500 flex gap-2 items-center">
+      <SheetTrigger className=" bg-primary-green p-2 rounded-md text-white hover:bg-green-500 flex gap-2 items-center">
         Create new <PlusIcon />
       </SheetTrigger>
       <SheetContent side={"left"} className="overflow-scroll flex flex-col">
