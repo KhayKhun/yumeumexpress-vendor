@@ -17,6 +17,8 @@ import { IoIosCheckmarkCircle } from "react-icons/io";
 import { BsBag, BsCart2, BsStarFill,BsShopWindow, BsPlus,BsDash, BsX } from "react-icons/bs";
 import { FiEdit } from "react-icons/fi";
 
+import { BiChevronRight } from "react-icons/bi";
+
 interface IconProps {
   className ?: string;
 }
@@ -78,8 +80,11 @@ export const CheckmarkFillIcon: React.FC<IconProps> = ({ className }) => (
 export const RefreshIcon: React.FC<IconProps> = ({ className }) => (
   <RiRefreshLine className={className} />
 );
+export const SmallRightArrowIcon: React.FC<IconProps> = ({ className }) => (
+  <BiChevronRight className={className} />
+);
 
-export const BackButton = () => {
+export const BackButton = ({text} : {text:string}) => {
   const navigate = useNavigate();
   return (
     <button
@@ -88,8 +93,7 @@ export const BackButton = () => {
       }}
       className="text-lg text-primary-green flex items-center"
     >
-      <RiArrowLeftLine />
-      <span className="text-sm">Back</span>
+      <RiArrowLeftLine /> <span className="text-sm">{text}</span>
     </button>
   );
 };

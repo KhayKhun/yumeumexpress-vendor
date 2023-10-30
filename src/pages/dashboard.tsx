@@ -1,9 +1,7 @@
 import MyResturants from "../components/dashboard/MyResturnats"
-import Header from "../components/essentials/Header"
 const DashboardPage = () => {
   return (
-    <div className="px-[40px] pt-4">
-        <Header/>
+    <div className="px-[10px] sm:px-[20px] md:px-[40px] pt-4">
         <MyResturants/>
     </div>
   )

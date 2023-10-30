@@ -12,7 +12,6 @@ import FoodsManage from "./components/resturant/FoodsManage.tsx";
 import Info from "./components/resturant/Info.tsx";
 import { Toaster } from "@/components/ui/toaster";
 
-const MarginGap = () => <div className="mb-[60px]" />;
 const router = createBrowserRouter([
   {
     path: "/",
@@ -52,7 +51,7 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <MarginGap />
+    {/* <MarginGap /> */}
     <RouterProvider router={router} />
     <Toaster/>
   </React.StrictMode>

@@ -8,6 +8,7 @@ import LoadingFoods from "@/components/essentials/LoadingFoods";
 import ColumnComponent from "./columns";
 import { CheckmarkFillIcon, EditIcon } from "@/components/essentials/Icons";
 import AddMoreFoods from "./cards/AddMoreFoods";
+
 export default function FoodTable() {
   const { columns } = ColumnComponent();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -16,12 +17,14 @@ export default function FoodTable() {
   const [loading, setLoading] = useState<boolean>(false);
   const setFoods = useFoodStore((state: any) => state.setFoods);
   const foods = useFoodStore((state: any) => state.foods);
+  const [error,setError] = useState(false);
 
   const updateMultipleRows = async () => {
+    setError(false);
     setLoading(true);
     const ls: any = localStorage.getItem("copy_foods");
     const copy_foods = JSON.parse(ls);
-    console.log(copy_foods, 'copy_foods called');
+
     try {
       for (const food of copy_foods) {
         const { error } = await supabase
@@ -36,11 +39,11 @@ export default function FoodTable() {
       }
     } catch (error) {
       console.log(error);
+      setError(true)
       alert("error updating foods");
       return;
     }
 
-    console.log("success");
 
     setSearchParams(
       (prev: any) => {
@@ -53,6 +56,8 @@ export default function FoodTable() {
   };
 
   const fetchFoods = async () => {
+    setError(false);
+    setLoading(true);
     const { data, error } = await supabase
       .from("products")
       .select("id,image,name,discount,is_available,price,description")
@@ -61,6 +66,7 @@ export default function FoodTable() {
 
     if (error) {
       console.log(error);
+      setError(true);
       return;
     }
     setFoods(data);
@@ -71,9 +77,7 @@ useEffect(()=>{
 },[])
   return (
     <div className="container mx-auto py-10">
-      {
-        loading && <LoadingFoods/>
-      }
+      {loading && <LoadingFoods />}
       {foods?.length > 0 ? (
         <main className="flex flex-col gap-3">
           {/* Buttons */}
@@ -81,7 +85,7 @@ useEffect(()=>{
             {/* Add more and edit btn */}
             <div className="flex gap-3">
               {/* Add more */}
-              <AddMoreFoods/>
+              <AddMoreFoods />
               {/* Edit */}
               <button
                 className="flex gap-2 items-center py-1 px-5 text-sm rounded-md border border-green-700 text-green-700 bg-green-50 disabled:border-gray-300 disabled:bg-gray-200 disabled:text-gray-400"
@@ -101,7 +105,9 @@ useEffect(()=>{
                   );
                 }}
               >
-                Edit foods <EditIcon />
+                <span className="hidden sm:inline">Edit foods</span>
+                <span className="inline sm:hidden">Edit</span>
+                <EditIcon />
               </button>
             </div>
             {/* Save */}
@@ -117,9 +123,12 @@ useEffect(()=>{
           </div>
           <DataTable columns={columns} data={foods} />
         </main>
-      ) : (
-        <ErrorPage />
-      )}
+      ) : (!error) ? (
+        <main>
+          No foods yet
+          <AddMoreFoods />
+        </main>
+      ) : <ErrorPage/>}
     </div>
   );
 }

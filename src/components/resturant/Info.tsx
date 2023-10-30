@@ -9,7 +9,24 @@ import LoadingFoods from "../essentials/LoadingFoods";
 
 const Info = () => {
   const { resturantId } = useParams();
+ const fetchSellerData = async (userId: string) => {
+   const { data, error } = await supabase
+     .from("sellers")
+     .select("id,name,address,opens_at,closes_at,image,owner_id")
+     .eq("id", resturantId);
 
+   if (error) {
+     console.log(error);
+     return;
+   }
+   if (data[0]?.owner_id === userId) {
+     setSeller(data[0]);
+     setLoading(false);
+   } else {
+     setLoading(false);
+     setSeller(null);
+   }
+ };
   const seller = useSellerStore((state: any) => state.seller);
   const setSeller = useSellerStore((state: any) => state.setSeller);
   const [imageFile, setImageFile] = useState<null | string>(null);
@@ -26,24 +43,7 @@ const Info = () => {
   const closesRef = useRef<any>(null);
   const imageRef = useRef<any>(null);
 
-  const fetchSellerData = async (userId: string) => {
-    const { data, error } = await supabase
-      .from("sellers")
-      .select("id,name,address,opens_at,closes_at,image,owner_id")
-      .eq("id", resturantId);
-
-    if (error) {
-      console.log(error);
-      return;
-    }
-    if (data[0]?.owner_id === userId) {
-      setSeller(data[0]);
-      setLoading(false);
-    } else {
-      setLoading(false);
-      setSeller(null);
-    }
-  };
+ 
 
   useEffect(() => {
     setLoading(true);
@@ -119,7 +119,7 @@ const Info = () => {
           {
             loading && <LoadingFoods/>
           }
-          <div className="shadow-lg rounded-lg w-[70%] p-4 flex flex-col gap-3">
+          <div className="shadow-lg rounded-lg w-[90vw] sm:w-[70%] p-4 flex flex-col gap-3">
             <h1 className="text-primary-green font-semibold mx-auto uppercase text-lg self-center">
               vendor info
             </h1>
@@ -194,7 +194,7 @@ const Info = () => {
             </div>
             <div className="flex w-full justify-end mt-4 gap-4">
               <button
-                className="green-btn-border"
+                className="btn-sm btn-edit"
                 disabled={edit === "true"}
                 onClick={() => {
                   setSearchParams(
@@ -208,7 +208,7 @@ const Info = () => {
               >
                 Edit
               </button>
-              <button className="" onClick={UpdateSellerInfo}>
+              <button className="btn-sm btn-save" onClick={UpdateSellerInfo}>
                 Save
               </button>
             </div>

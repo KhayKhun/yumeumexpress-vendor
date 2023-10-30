@@ -1,5 +1,4 @@
 import AuthComponent from "./components/auth/AuthComponent";
-import Header from "./components/essentials/Header";
 import supabase from "./lib/supabase";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +22,6 @@ function App() {
 
   return (
     <main>
-      <Header />
       <AuthComponent />
     </main>
   );

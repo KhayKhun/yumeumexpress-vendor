@@ -1,4 +1,3 @@
-import Header from "../components/essentials/Header";
 import supabase from "../lib/supabase";
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -83,7 +82,6 @@ const ProfilePage = () => {
     const phoneInput = phoneRef.current.value;
 
     if(nameInput === profile?.full_name && addressInput === profile?.address && phoneInput === profile?.phone){
-      navigate('/foods');
       return;
     }
 
@@ -132,9 +130,8 @@ const ProfilePage = () => {
 
   return (
     <main className="w-screen h-screen flex justify-center items-center">
-      <Header />
       <div className="flex flex-col w-[70%] shadow-lg p-4 gap-2">
-        <BackButton/>
+        <BackButton text="back"/>
         <h1 className="text-primary-green font-semibold mx-auto uppercase text-lg">
           My Profile
         </h1>
@@ -195,7 +192,7 @@ const ProfilePage = () => {
           <div className="flex gap-2">
             {/* Edit */}
             <button
-              className="green-btn-border"
+              className="btn-sm btn-edit"
               disabled={edit === "true"}
               onClick={() => {
                 setSearchParams((prev: any) => {
@@ -207,7 +204,7 @@ const ProfilePage = () => {
               Edit
             </button>
             {/* Save */}
-            <button onClick={SaveFunction} className="green-btn">
+            <button onClick={SaveFunction} className="btn-sm btn-save">
               Save
             </button>
           </div>

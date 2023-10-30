@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Header from "../components/essentials/Header";
 import FoodsManage from "../components/resturant/FoodsManage";
 import Info from "../components/resturant/Info";
 import Orders from "../components/resturant/orders/Orders";
@@ -8,14 +7,13 @@ import { Routes, Route } from "react-router-dom";
 import { useSellerStore } from "@/states/resturantState";
 import { useNavigate, useParams } from "react-router-dom";
 import supabase from "@/lib/supabase";
-import TestSocket from "@/lib/TestSocket";
+
 const ResturantPage = () => {
   const navigate = useNavigate();
   const { resturantId } = useParams();
   const [error,setError] = useState(false);
   const setSeller = useSellerStore((state: any) => state.setSeller);
 
-  const {JoinSocket} = TestSocket();
 
   const fetchOwner = async (owner_id: string) => {
     const { data, error } = await supabase
@@ -30,7 +28,7 @@ const ResturantPage = () => {
     if (data[0].owner_id === owner_id) {
       setError(false);
         setSeller(data[0]);
-        JoinSocket(data[0].id)
+        // JoinSocket(data[0].id)
 
     } else {
       setError(true)
@@ -53,8 +51,7 @@ const ResturantPage = () => {
     });
   }, []);
   return (
-    <main className="ml-[200px]">
-      <Header />
+    <main className="ml-0 mt-[40px] sm:mt-0 sm:ml-[200px]">
       <Sidebar />
       {!error && (
         <Routes>

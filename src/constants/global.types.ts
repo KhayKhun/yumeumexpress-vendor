@@ -11,7 +11,7 @@ export type foodType = {
 }
 
 export type resturantType = {
-    id: number;
+    id: number | string;
     name: string;
     opens_at : any;
     closes_at : any;

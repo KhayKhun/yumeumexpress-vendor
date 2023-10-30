@@ -15,9 +15,10 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { userOrderStore } from "@/states/orderState";
-import socket from "@/lib/socket";
+import TestSocket from "@/lib/TestSocket";
 
 const SingleOrder = () => {
+  const {approveFunc,rejectFunc} = TestSocket()
   const setOrders = userOrderStore((state: any) => state.setOrders);
   const fetchOrders = async () => {
     let { data, error } = await supabase
@@ -93,11 +94,11 @@ const SingleOrder = () => {
       return;
     }
     if (data[0]) {
-      if(data[0].status === "accepted"){  
-        socket.emit("approve", data[0]);
+      if (data[0].status === "accepted") {
+        approveFunc(data[0])
       }
-      if(data[0].status === "rejected"){  
-        socket.emit("reject", data[0]);
+      if (data[0].status === "rejected") {
+        rejectFunc(data[0]);
       }
     }
     fetchOrders();
@@ -105,8 +106,10 @@ const SingleOrder = () => {
   }
 
   useEffect(() => {
-    fetchOrder();
-    fetchOrderItems();
+    if (Number(display)) {
+      fetchOrder();
+      fetchOrderItems();
+    }
   }, [searchParams]);
 
   function findSubTotal(arr: any[]) {
@@ -121,13 +124,16 @@ const SingleOrder = () => {
       {!error && Number(display) ? (
         <main className="w-full h-full max-h-[70vh] flex flex-col gap-2 pt-2 mb-4">
           <h1 className="mx-auto flex text-gray-600">
-            no. <span className="text-lg text-black mr-4">{display}</span>
+            no.{" "}
+            <span className="text-base sm:text-lg text-black mr-4">
+              {display}
+            </span>
             <Badge variant={"success"} className="opacity-50">
               Paid <CheckmarkFillIcon />
             </Badge>
           </h1>
           <hr />
-          <div className="text-gray-700 text-[13px]">
+          <div className="text-gray-700 text-[12px] md:text-[13px]">
             <p className="">Name: {order?.profiles.full_name}</p>
             <p className="">Address: {order?.address}</p>
             {order?.customer_message && (
@@ -139,7 +145,7 @@ const SingleOrder = () => {
             {items?.map((item) => {
               return (
                 <li key={item.id}>
-                  <div className="w-[60px] h-[60px] relative ">
+                  <div className="w-[40px] h-[40px] sm:w-[60px] sm:h-[60px] relative ">
                     <img
                       src={item.product.image}
                       className="w-full h-full rounded-lg object-cover"
@@ -157,23 +163,27 @@ const SingleOrder = () => {
           </ul>
           <div className="border">
             <Table>
-              <TableBody>
+              <TableBody className="text-sm sm:text-base">
                 {items?.map((item, index) => {
                   return (
                     <TableRow key={item.product.id}>
                       <TableCell className="font-medium text-gray-500">
                         {index + 1}.
                       </TableCell>
-                      <TableCell>{item.product.name}</TableCell>
-                      <TableCell>&times;{item.quantity}</TableCell>
-                      <TableCell className="text-right">
+                      <TableCell className="text-[12px] sm:text-sm">
+                        {item.product.name}
+                      </TableCell>
+                      <TableCell className="text-[12px] sm:text-sm">
+                        &times;{item.quantity}
+                      </TableCell>
+                      <TableCell className="text-right text-[12px] sm:text-sm">
                         {item.total_price}
                       </TableCell>
                     </TableRow>
                   );
                 })}
 
-                <TableRow className="border-0">
+                <TableRow className="border-0 text-[12px] sm:text-sm">
                   <TableCell colSpan={2} className="text-center">
                     SubTotal
                   </TableCell>
@@ -181,7 +191,7 @@ const SingleOrder = () => {
                     {items && findSubTotal(items)}
                   </TableCell>
                 </TableRow>
-                <TableRow className="border-b border-green-200">
+                <TableRow className="border-b border-green-200 text-[12px] sm:text-sm">
                   <TableCell colSpan={2} className="text-center">
                     Delivery Fee
                   </TableCell>
@@ -192,7 +202,7 @@ const SingleOrder = () => {
                 <TableRow className=" ">
                   <TableCell
                     colSpan={2}
-                    className="text-center font-semibold text-[18px]"
+                    className="text-center font-semibold text-sm sm:text-[18px]"
                   >
                     Total
                   </TableCell>

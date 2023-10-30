@@ -5,17 +5,19 @@ import { useResturantStore } from "../../states/resturantState";
 import { resturantType } from "../../constants/global.types";
 import ResturantCard from "./ResturantCard";
 import { Link } from "react-router-dom";
-import { PlusIcon } from "../essentials/Icons";
+import AuthComponent from "../auth/AuthComponent";
+import Register from "./Register";
+
 const MyResturants = () => {
   const user = useAuthStore((state: any) => state.user);
   const resturants = useResturantStore((state: any) => state.resturants);
   const setResturants = useResturantStore((state: any) => state.setResturants);
 
-  const fetchResturants = async (id: string) => {
+  const fetchResturants = async () => {
     const { data, error } = await supabase
       .from("sellers")
       .select()
-      .eq("owner_id", id);
+      .eq("owner_id", user.id);
 
     if (error) {
       console.log(error);
@@ -23,27 +25,20 @@ const MyResturants = () => {
     }
     setResturants(data);
   };
-
+  
   useEffect(() => {
     if (user?.id) {
-      fetchResturants(user.id);
+      fetchResturants();
     }
   }, [user]);
-  console.log(user);
   return (
     <div className="flex flex-col gap-3 items-start">
-      <h1 className="text-2xl font-semibold tracking-wide">
-        My Resturants
-      </h1>
-      <Link
-        to="/register"
-        className="bg-primary-green p-2 rounded-md text-white hover:bg-green-500 flex gap-2 items-center"
-      >
-        Create new <PlusIcon />
-      </Link>
+      <AuthComponent />
+      <h1 className="text-2xl font-semibold tracking-wide">My Resturants</h1>
+      <Register fetchResturants={fetchResturants} />
 
       {resturants?.length > 0 ? (
-        <ul className="grid grid-cols-3 gap-3">
+        <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {resturants.map((resturant: resturantType) => {
             return <ResturantCard key={resturant.id} data={resturant} />;
           })}

@@ -103,4 +103,13 @@
   li{
     @apply list-none
   }
+  .btn-sm{
+    @apply px-4 py-2 rounded-md
+  }
+  .btn-edit{
+    @apply bg-white border border-primary-green text-primary-green disabled:text-gray-400 disabled:border-gray-400  
+  }
+  .btn-save{
+    @apply bg-primary-green border border-primary-green text-white disabled:text-gray-400 disabled:border-gray-400
+  }
 }

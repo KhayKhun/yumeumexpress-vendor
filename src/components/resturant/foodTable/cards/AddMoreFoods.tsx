@@ -13,16 +13,17 @@ import supabase from "@/lib/supabase";
 import { Switch } from "@/components/ui/switch";
 import { useRef, useState } from "react";
 import { useAuthStore } from "@/states/authState";
+import { useFoodStore } from "@/states/foodState";
+import { useToast } from "@/components/ui/use-toast";
 
 const AddMoreFoods = () => {
+  const {toast} = useToast();
   const [searchParams] = useSearchParams();
   const edit = searchParams.get("edit");
 
   const titleRef = useRef<any>(null);
   const descriptionRef = useRef<any>(null);
   const priceRef = useRef<any>(null);
-  const discountRef = useRef<any>(null);
-  const categoriesRef = useRef<any>(null);
   const imageRef = useRef<any>(null);
   const [imageFile, setImageFile] = useState<string | null>(null);
   const[available,setAvailable] = useState(true);
@@ -30,6 +31,22 @@ const AddMoreFoods = () => {
   const user = useAuthStore((state: any) => state.user);
   const {resturantId} = useParams();
  
+
+  const setFoods = useFoodStore((state: any) => state.setFoods);
+  const fetchFoods = async () => {
+    const { data, error } = await supabase
+      .from("products")
+      .select("id,image,name,discount,is_available,price,description")
+      .eq("seller_id", resturantId)
+      .order("id", { ascending: false });
+
+    if (error) {
+      console.log(error);
+      return;
+    }
+    setFoods(data);
+  };
+
   const InsertNewFood = async () => {
     const { error } = await supabase
       .from("products")
@@ -38,16 +55,24 @@ const AddMoreFoods = () => {
         name: titleRef.current.value,
         description : descriptionRef.current.value ?descriptionRef.current.value:null,
         price : priceRef.current.value,
-        discount : discountRef.current.value ? discountRef.current.value: null,
         image : imageFile ? imageFile : null,
         is_available : available
     });
 
     if(error){
         console.log(error);
+    toast({
+      title: "Error",
+      description: `Error on adding new food`,
+    });
         return;
     }
     console.log('success');
+    toast({
+      title: "Success!",
+      description: `Added new food`,
+    });
+    fetchFoods()
   };
  const handleFileUpload = () => {
    imageRef.current.click();
@@ -80,16 +105,21 @@ const AddMoreFoods = () => {
         className="flex gap-2 items-center py-1 px-5 text-sm rounded-md border border-green-700 text-white bg-green-700 disabled:border-gray-300 disabled:bg-gray-200 disabled:text-gray-400"
         disabled={edit === "true"}
       >
-        Add new food <PlusIcon className="w-[15px] h-[15px]" />
+        <span className="hidden md:inline">Add new food </span>
+        <span className="inline sm:hidden">Add </span>
+        <PlusIcon className="w-[15px] h-[15px]" />
       </SheetTrigger>
       <SheetContent side={"left"} className="overflow-scroll flex flex-col">
         <SheetHeader>
           <SheetTitle>Add new food</SheetTitle>
         </SheetHeader>
         <li className="w-full flex gap-2">
-          <Switch defaultChecked={true} onCheckedChange={(e)=>{
-            setAvailable(e)
-          }}/>
+          <Switch
+            defaultChecked={true}
+            onCheckedChange={(e) => {
+              setAvailable(e);
+            }}
+          />
           <p>Available:</p>
         </li>
         <li className="w-full">
@@ -107,14 +137,14 @@ const AddMoreFoods = () => {
             <span>MMK</span>
           </div>
         </li>
-        <li className="w-full">
+        {/* <li className="w-full">
           <p>Discount:</p>
           <input ref={discountRef} type="text" className="form-input" />
         </li>
         <li className="w-full">
           <p>Categories:</p>
           <input ref={categoriesRef} type="text" className="form-input" />
-        </li>
+        </li> */}
         <li className="w-full flex justify-center">
           <input
             type="file"
@@ -142,7 +172,8 @@ const AddMoreFoods = () => {
         <SheetFooter>
           <SheetClose
             onClick={InsertNewFood}
-          className="w-full bg-primary-green p-3 text-white rounded-lg hover:bg-green-500">
+            className="w-full bg-primary-green p-3 text-white rounded-lg hover:bg-green-500"
+          >
             Add
           </SheetClose>
         </SheetFooter>
