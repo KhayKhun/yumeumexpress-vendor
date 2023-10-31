@@ -3,6 +3,7 @@ import socket from "./socket";
 import { userOrderStore } from "@/states/orderState";
 import { useToast } from "@/components/ui/use-toast";
 import supabase from "./supabase";
+import { playNotificationSound } from "@/constants/functions";
 
 export default function TestSocket() {
   const { toast } = useToast();
@@ -37,6 +38,7 @@ export default function TestSocket() {
         }
         if (data[0]) {
           console.log(data);
+          playNotificationSound();
           toast({
             title: "New order to " + data[0].name+"!",
           });

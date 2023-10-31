@@ -6,6 +6,7 @@ import { UserIcon } from "../essentials/Icons";
 import { useResturantStore } from "@/states/resturantState";
 import { resturantType } from "@/constants/global.types";
 import TestSocket from "@/lib/TestSocket";
+import { requestAudioPermission } from "@/constants/functions";
 
 function AuthComponent() {
   const { JoinSocket } = TestSocket();
@@ -41,6 +42,9 @@ function AuthComponent() {
       JoinSocket(resturant.id);
     });
   }, [resturants]);
+  useEffect(()=>{
+    requestAudioPermission();
+  },[])
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange(
       (event, session) => {
