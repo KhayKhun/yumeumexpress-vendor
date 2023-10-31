@@ -4,7 +4,6 @@ import { useAuthStore } from "../../states/authState";
 import { useResturantStore } from "../../states/resturantState";
 import { resturantType } from "../../constants/global.types";
 import ResturantCard from "./ResturantCard";
-import { Link } from "react-router-dom";
 import AuthComponent from "../auth/AuthComponent";
 import Register from "./Register";
 
@@ -51,12 +50,6 @@ const MyResturants = () => {
               <span className="underline"> {user?.email}</span>. Register a new
               resturant?
             </p>
-            <Link
-              to="/register"
-              className="shadow-sm bg-primary-green hover:bg-green-500 py-2 px-4 rounded-lg text-white"
-            >
-              Register new resturant
-            </Link>
           </div>
         </main>
       )}
