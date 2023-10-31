@@ -2,7 +2,6 @@ const audio = new Audio("/noti.mp3");
 export async function requestAudioPermission() {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const audio = new Audio("/noti.mp3");
     stream.getTracks().forEach((track) => track.stop());
   } catch (error) {
     console.error("Error requesting audio permission:", error);
